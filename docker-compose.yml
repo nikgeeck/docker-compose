@@ -1,0 +1,36 @@
+version: "3.7"
+
+# Define services/containers
+services:
+  # MySQL container
+  mysql:
+    # Use mysql:latest image
+    image: mysql:latest
+    # Connect to "db-network" network, as defined below
+    networks:
+      - db-network
+    # Pass a list of environment variables to the container
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+
+ # phpMyAdmin container
+  phpmyadmin:
+    # Use phpmyadmin/phpmyadmin:5.0.0 image
+    image: phpmyadmin/phpmyadmin:5.0.0
+    # Connect to "db-network" network, as defined below
+    networks:
+      - db-network
+    # Map port 8080 on the host to port 80 inside the container
+    # Syntax is: "HOST_PORT:CONTAINER_PORT"
+    ports:
+      - "8080:80"
+    # Pass a list of environment variables to the container
+    environment:
+      PMA_HOST: mysql
+    # Wait for "mysql" container to start first
+    depends_on:
+      - mysql
+
+# Define networks
+networks:
+ db-network:
